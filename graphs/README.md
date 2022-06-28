@@ -5,7 +5,7 @@
 ## Todo
 
 - [ ] DeepWALK
-- [ ] 
+- [ ] TransE
 - [ ] GraphSAGE
 - [ ] GCN
 - [ ] GAT 
