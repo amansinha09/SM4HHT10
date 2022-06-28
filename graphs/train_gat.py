@@ -64,7 +64,6 @@ def main(args):
     train_mask = g.ndata['train_mask']
     val_mask = g.ndata['val_mask']
     test_mask = g.ndata['test_mask']
-    test_mask2  = g.ndata['testt_mask']
     num_feats = features.shape[1]
     n_classes = data.num_labels; print(n_classes)
     n_edges = data.graph.number_of_edges()
@@ -147,10 +146,6 @@ def main(args):
         model.load_state_dict(torch.load('es_checkpoint.pt'))
     print("===========Testing 1=======================")
     acc = evaluate(model, features, labels, test_mask)
-    print("Test Accuracy {:.4f}".format(acc))
-
-    print("===========Testing 2=======================")
-    acc = evaluate(model, features, labels, test_mask2)
     print("Test Accuracy {:.4f}".format(acc))
 
 if __name__ == '__main__':

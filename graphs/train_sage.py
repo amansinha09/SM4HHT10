@@ -84,7 +84,6 @@ def main(args):
     train_mask = g.ndata['train_mask']
     val_mask = g.ndata['val_mask']
     test_mask = g.ndata['test_mask']
-    test_mask2 = g.ndata['testt_mask']
     in_feats = features.shape[1]
     n_classes = data.num_classes
     n_edges = data.graph.number_of_edges()
@@ -114,8 +113,7 @@ def main(args):
     train_nid = train_mask.nonzero().squeeze()
     val_nid = val_mask.nonzero().squeeze()
     test_nid = test_mask.nonzero().squeeze()
-    testt_nid = test_mask2.nonzero().squeeze()
-
+    
     # graph preprocess and calculate normalization factor
     g = dgl.remove_self_loop(g)
     n_edges = g.number_of_edges()
@@ -165,11 +163,7 @@ def main(args):
     acc = evaluate(model, g, features, labels, test_nid)
     print("Test Accuracy {:.4f}".format(acc))
 
-    print("============ Testing2 ========================")
-    acc = evaluate(model, g, features, labels, testt_nid)
-    print("Test Accuracy {:.4f}".format(acc))
-
-
+    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='GraphSAGE')
     register_data_args(parser)

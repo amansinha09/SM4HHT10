@@ -13,18 +13,17 @@ class MedNER(DGLDataset):
     def process(self):
         # ======== fetching data from various files ========== #
         # load features
-        features = np.load('/home/amansinha/SM4HHT10/graphs/data/random_features.npz')['feat']
+        features = np.load('./data/random_features.npz')['feat']
         node_features = torch.from_numpy(features)
 
         # load labels
-        labels = pd.read_csv('/home/amansinha/SM4HHT10/graphs/data/conll.labels',sep='\t', names=['id', 'label'])
+        labels = pd.read_csv('./data/conll.labels',sep='\t', names=['id', 'label'])
         label_encoder = {' O':0, ' B-MISC':1, ' I-MISC': 2}
         labels.label = [label_encoder[l] for l in labels.label]
-        labels.id = list(range(len(labels)))
         node_labels = torch.from_numpy(labels.label.to_numpy())
 
         # load cites
-        cites = pd.read_csv('/home/amansinha/SM4HHT10/graphs/data/context.edges', sep='\t', names= ['src', 'dest', 'rel'] )
+        cites = pd.read_csv('./data/context.edges', sep='\t', names= ['src', 'dest', 'rel'] )
         src = cites.src.tolist()
         dest = cites.dest.tolist()
         edges_src = torch.from_numpy(np.asarray(src))
@@ -33,7 +32,7 @@ class MedNER(DGLDataset):
         print(max(all_nodes), len(set(all_nodes)))
 
         # load masks
-        masks = np.load('./../graphs/data/masks.npz')
+        masks = np.load('./data/masks.npz')
         train_mask = torch.from_numpy(masks['train'])
         val_mask = torch.from_numpy(masks['val'])
         test_mask = torch.from_numpy(masks['test'])
@@ -42,7 +41,7 @@ class MedNER(DGLDataset):
         self.graph = dgl.graph((edges_src, edges_dst), num_nodes=node_features.shape[0])
         self.graph.ndata['feat'] = node_features
         self.graph.ndata['label'] = node_labels
-        self.graph.num_labels = len(set(node_labels))
+        self.graph.num_labels = len(set(labels.label))
 
 
         self.graph.ndata['train_mask'] = train_mask

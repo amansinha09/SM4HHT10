@@ -23,7 +23,7 @@ def evaluate(model, features, labels, mask):
         _, indices = torch.max(logits, dim=1)
         correct = torch.sum(indices == labels)
         print(classification_report(labels.detach().cpu().numpy(), indices.detach().cpu().numpy()))
-        return correct.item() * 1.0 / len(labels)
+        return correct.item() * 1.0 / len(labels), indices
 
 
 def main(args):
@@ -45,7 +45,7 @@ def main(args):
         g = g.int().to(args.gpu)
 
     features = g.ndata['feat'];print(features.dtype)
-    labels = g.ndata['label']
+    labels = g.ndata['label']; print(labels)
     train_mask = g.ndata['train_mask']
     val_mask = g.ndata['val_mask']
     test_mask = g.ndata['test_mask']
@@ -89,7 +89,7 @@ def main(args):
 
     if cuda:
         model.cuda()
-    loss_fcn = torch.nn.CrossEntropyLoss()
+    loss_fcn = torch.nn.CrossEntropyLoss(ignore_index=0)
 
     # use optimizer
     optimizer = torch.optim.Adam(model.parameters(),
@@ -114,15 +114,17 @@ def main(args):
         if epoch >= 3:
             dur.append(time.time() - t0)
         t2 = time.time(); train_dur.append(t2-t1)
-        acc = evaluate(model, features, labels, val_mask)
+        acc,_ = evaluate(model, features, labels, val_mask)
         print("Epoch {:05d} | Time(s) {:.4f} | Loss {:.4f} | Accuracy {:.4f} | "
               "ETputs(KTEPS) {:.2f}". format(epoch, np.mean(dur), loss.item(),
                                              acc, n_edges / np.mean(dur) / 1000))
     print(f'GCN Training time avg : {np.mean(train_dur):.6f} seconds | total: {sum(train_dur)} seconds')
     print("============Testing 1========================")
-    acc = evaluate(model, features, labels, test_mask)
+    acc, preds = evaluate(model, features, labels, test_mask)
     print("Test accuracy {:.4%}".format(acc))
-
+    labels = labels.detach().cpu().numpy()
+    preds = preds.detach().cpu().numpy()
+    #print(*list(zip(labels,preds)),sep='\n')
 
 
 if __name__ == '__main__':
