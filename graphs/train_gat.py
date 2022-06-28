@@ -22,7 +22,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 from gat import GAT
 from utils import EarlyStopping
 
-from data import OurPubmedData
+from dataset import MedNER
 
 def accuracy(logits, labels):
     _, indices = torch.max(logits, dim=1)
@@ -47,10 +47,8 @@ def main(args):
         data = CoraGraphDataset()
     elif args.dataset == 'citeseer':
         data = CiteseerGraphDataset()
-    elif args.dataset == 'pubmed':
-        data = PubmedGraphDataset()
-    elif args.dataset == 'mypubmed':
-        data = OurPubmedData()
+    elif args.dataset == 'medner':
+        data = MedNER()
     else:
         raise ValueError('Unknown dataset: {}'.format(args.dataset))
 

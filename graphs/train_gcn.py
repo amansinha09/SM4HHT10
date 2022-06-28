@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import dgl
 from dgl.data import CoraGraphDataset, CiteseerGraphDataset, PubmedGraphDataset
 
-from utils import OurPubmedData
+from dataset import MedNER
 
 from sklearn.metrics import classification_report, confusion_matrix
 from gcn import GCN
@@ -32,10 +32,8 @@ def main(args):
         data = CoraGraphDataset()
     elif args.dataset == 'citeseer':
         data = CiteseerGraphDataset()
-    elif args.dataset == 'pubmed':
-        data = PubmedGraphDataset()
-    elif args.dataset == 'mypubmed':
-        data = OurPubmedData()
+    elif args.dataset == 'medner':
+        data = MedNER()
     else:
         raise ValueError('Unknown dataset: {}'.format(args.dataset))
 
@@ -51,7 +49,7 @@ def main(args):
     train_mask = g.ndata['train_mask']
     val_mask = g.ndata['val_mask']
     test_mask = g.ndata['test_mask']
-    test_mask2 = g.ndata['testt_mask']
+    
     in_feats = features.shape[1]
     n_classes = data.num_labels
     n_edges = data.graph.number_of_edges()
@@ -125,9 +123,6 @@ def main(args):
     acc = evaluate(model, features, labels, test_mask)
     print("Test accuracy {:.4%}".format(acc))
 
-    print("============Testing 2========================")
-    acc = evaluate(model, features, labels, test_mask2)
-    print("Test accuracy {:.4%}".format(acc))
 
 
 if __name__ == '__main__':

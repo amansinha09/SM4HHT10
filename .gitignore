@@ -3,3 +3,4 @@ data/socialdisner_sample-set/
 notebooks/
 GraphNER/
 data/socialdisner_v3/
+graph/data/random_features.npz

@@ -20,7 +20,7 @@ from dgl.nn.pytorch.conv import SAGEConv
 
 from sklearn.metrics import classification_report
 
-from data import OurPubmedData
+from dataset import MedNER
 
 class GraphSAGE(nn.Module):
     def __init__(self,
@@ -71,10 +71,8 @@ def main(args):
         data = CoraGraphDataset()
     elif args.dataset == 'citeseer':
         data = CiteseerGraphDataset()
-    elif args.dataset == 'pubmed':
-        data = PubmedGraphDataset()
-    elif args.dataset == 'mypubmed':
-        data = OurPubmedData()
+    elif args.dataset == 'medner':
+        data = MedNER()
     else:
         raise ValueError('Unknown dataset: {}'.format(args.dataset))
 
