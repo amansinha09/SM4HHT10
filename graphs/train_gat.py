@@ -18,6 +18,7 @@ import dgl
 from dgl.data import register_data_args
 from dgl.data import CoraGraphDataset, CiteseerGraphDataset, PubmedGraphDataset
 
+import sklearn
 from sklearn.metrics import confusion_matrix, classification_report
 from gat import GAT
 from utils import EarlyStopping
@@ -64,7 +65,6 @@ def main(args):
     train_mask = g.ndata['train_mask']
     val_mask = g.ndata['val_mask']
     test_mask = g.ndata['test_mask']
-    test_mask2  = g.ndata['testt_mask']
     num_feats = features.shape[1]
     n_classes = data.num_labels; print(n_classes)
     n_edges = data.graph.number_of_edges()
@@ -101,7 +101,9 @@ def main(args):
         stopper = EarlyStopping(patience=100)
     if cuda:
         model.cuda()
-    loss_fcn = torch.nn.CrossEntropyLoss()
+    
+    wts = torch.tensor(sklearn.utils.class_weight.compute_class_weight(class_weight='balanced', classes=[0,1,2], y=labels[train_mask].detach().cpu().numpy()), dtype=torch.float32)
+    loss_fcn = torch.nn.CrossEntropyLoss(weight =wts.cuda())
 
     # use optimizer
     optimizer = torch.optim.Adam(
@@ -147,10 +149,6 @@ def main(args):
         model.load_state_dict(torch.load('es_checkpoint.pt'))
     print("===========Testing 1=======================")
     acc = evaluate(model, features, labels, test_mask)
-    print("Test Accuracy {:.4f}".format(acc))
-
-    print("===========Testing 2=======================")
-    acc = evaluate(model, features, labels, test_mask2)
     print("Test Accuracy {:.4f}".format(acc))
 
 if __name__ == '__main__':
