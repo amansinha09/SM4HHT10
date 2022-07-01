@@ -1,6 +1,8 @@
 import argparse
 import time
 import numpy as np
+import sklearn
+
 import torch
 import torch.nn.functional as F
 import dgl
@@ -89,7 +91,8 @@ def main(args):
 
     if cuda:
         model.cuda()
-    loss_fcn = torch.nn.CrossEntropyLoss(ignore_index=0)
+    wts = torch.tensor(sklearn.utils.class_weight.compute_class_weight(class_weight='balanced', classes=[0,1,2], y=labels[train_mask].detach().cpu().numpy()), dtype=torch.float32)
+    loss_fcn = torch.nn.CrossEntropyLoss(weight =wts.cuda())
 
     # use optimizer
     optimizer = torch.optim.Adam(model.parameters(),

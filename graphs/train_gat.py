@@ -18,6 +18,7 @@ import dgl
 from dgl.data import register_data_args
 from dgl.data import CoraGraphDataset, CiteseerGraphDataset, PubmedGraphDataset
 
+import sklearn
 from sklearn.metrics import confusion_matrix, classification_report
 from gat import GAT
 from utils import EarlyStopping
@@ -100,7 +101,9 @@ def main(args):
         stopper = EarlyStopping(patience=100)
     if cuda:
         model.cuda()
-    loss_fcn = torch.nn.CrossEntropyLoss()
+    
+    wts = torch.tensor(sklearn.utils.class_weight.compute_class_weight(class_weight='balanced', classes=[0,1,2], y=labels[train_mask].detach().cpu().numpy()), dtype=torch.float32)
+    loss_fcn = torch.nn.CrossEntropyLoss(weight =wts.cuda())
 
     # use optimizer
     optimizer = torch.optim.Adam(

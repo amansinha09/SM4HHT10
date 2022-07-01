@@ -7,6 +7,8 @@ Simple reference implementation of GraphSAGE.
 import argparse
 import time
 import numpy as np
+import sklearn
+
 import networkx as nx
 import torch
 import torch.nn as nn
@@ -132,6 +134,9 @@ def main(args):
     if cuda:
         model.cuda()
 
+    wts = torch.tensor(sklearn.utils.class_weight.compute_class_weight(class_weight='balanced', classes=[0,1,2], y=labels[train_mask].detach().cpu().numpy()), dtype=torch.float32)
+    #loss_fcn = torch.nn.CrossEntropyLoss(weight =wts.cuda())
+
     # use optimizer
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
@@ -143,7 +148,7 @@ def main(args):
             t0 = time.time()
         # forward
         logits = model(g, features)
-        loss = F.cross_entropy(logits[train_nid], labels[train_nid])
+        loss = F.cross_entropy(logits[train_nid], labels[train_nid], weight=wts.cuda())
 
         optimizer.zero_grad()
         loss.backward()
