@@ -9,9 +9,10 @@ SPanish NER : Reconocimiento de Entidad Nombrada
 - [x] Add the dataset
 - [x] Make list of the benchmarks
 - [x] create conll3 dataformat converter 
+- [x] eval script
 - [ ] Try out benchmarks and update readme
 - [ ] Try out graphner and update
-- [ ] Extract POS, Dependency, Disease marker(1/0) 
+- [x] Extract POS 
 
 ## Data Version description
 
