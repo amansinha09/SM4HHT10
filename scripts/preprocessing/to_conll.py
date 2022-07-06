@@ -189,7 +189,7 @@ if __name__ == '__main__':
 
     data = tagSents(args.tweetsfolder, args.mentions)
     
-    if "train" in args.tweetsfolder:
+    if "training" in args.tweetsfolder:
         split_at_sent = round(80 * len(data.Sent_Id.dropna().drop_duplicates()) / 100)
         split_idx = data.index[data.Sent_Id.astype(str) == str(split_at_sent)][0:1][0] - 1
     
@@ -200,7 +200,7 @@ if __name__ == '__main__':
         cval.to_csv("data\\conll\\conll-spans-_cdev_enc_final.conll", sep="\t", encoding='utf-8', quoting=csv.QUOTE_NONE, index=False)
 
 
-    if "val" in args.tweetsfolder:
+    if "validation" in args.tweetsfolder:
     
         data.to_csv("data\\conll\\conll-spans-validation_ctest_final.conll", sep="\t", encoding='utf-8', quoting=csv.QUOTE_NONE, index=False)
 
