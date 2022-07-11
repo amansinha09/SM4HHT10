@@ -20,3 +20,9 @@ SPanish NER : Reconocimiento de Entidad Nombrada
 |---|---|
 |v1|C ; ??|
 |v2|A ; space based tokenization |
+
+## To run evaluation using official script
+
+```
+python official_eval.py ./../submissions/testgold_mana_without_mergingfix.tsv ./../data/socialdisner_v3/mentions.tsv ./
+```
