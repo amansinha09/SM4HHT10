@@ -103,6 +103,8 @@ def main(args):
         model.cuda()
     
     wts = torch.tensor(sklearn.utils.class_weight.compute_class_weight(class_weight='balanced', classes=[0,1,2], y=labels[train_mask].detach().cpu().numpy()), dtype=torch.float32)
+    print("weighted training:", wts)
+
     loss_fcn = torch.nn.CrossEntropyLoss(weight =wts.cuda())
 
     # use optimizer
