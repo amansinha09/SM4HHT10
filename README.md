@@ -41,3 +41,8 @@ python scripts\preprocessing\annotate_conll.py -file data\conll\training_cdev_fi
 ```
 python official_eval.py ./../submissions/testgold_mana_without_mergingfix.tsv ./../data/socialdisner_v3/mentions.tsv ./
 ```
+
+
+** notes
+- Remove special chars on generated conll files using regex
+- When running flair changing the slash // to \\ is linux. Also, when passing the argument save_to, folder must end with slash
