@@ -142,4 +142,8 @@ if __name__ == '__main__':
     
     train(tagger, corpus)
     
+<<<<<<< HEAD
     print(f"Files saved to {args.save_to}")
+=======
+    print(f"Files saved to {args.save_to}")
+>>>>>>> e901b015f908a75f8fc102177de962df446282e4
