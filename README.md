@@ -36,6 +36,15 @@ What preprocessing is done:
 python scripts\preprocessing\annotate_conll.py -file data\conll\training_cdev_final.tsv -name validation -save_to data\conll\
 ```
 
+## Running FLAIR
+# Word embeddings
+```python benchmarks\train_flair.py -train data\sampletraining\training_ctrain_final.conll -val data\sampletraining\training_cdev_final.conll -test data\sampletraining\test_only_space-spans.conll -save_to data\sampletraining\ -lm  "back_forw_clinical" ```
+
+When passing the -lm, a folder called "back_forw_clinical" is created within the provided folder (e.g. sampletraining\). Make sure the folder ends with slash.
+
+# Transformers
+
+
 ## To run evaluation using official script
 
 ```
