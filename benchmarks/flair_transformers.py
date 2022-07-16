@@ -43,7 +43,7 @@ def load_corpus():
         print("Input files:\n", file)
         print()
         # change to // in linux
-        name = args.save_to + file.split('\\')[-1].replace('.conll', '_flair.tsv').replace('training','')
+        name = args.save_to + file.split('/')[-1].replace('.conll', '_flair.tsv').replace('training','')
         df = pd.read_csv(file, sep="\t", quoting=csv.QUOTE_NONE, encoding='utf-8', dtype='object')
         if "Tag" not in df.columns: # for actual test there is no 'tag' col so we make a fake one
             df['Tag'] = "O"
@@ -113,7 +113,7 @@ if __name__ == '__main__':
                         choices = ['llange/xlm-roberta-large-spanish-clinical',
                                    'xlm-roberta-large',
                                    'PlanTL-GOB-ES/roberta-base-biomedical-clinical-es',
-                                   'ner-spanish-large',
+                                   'flair/ner-spanish-large',
                                    'mrm8488/bert-spanish-cased-finetuned-ner',
                                    'Davlan/bert-base-multilingual-cased-ner-hrl',
                                    'Babelscape/wikineural-multilingual-ner',
@@ -134,11 +134,12 @@ if __name__ == '__main__':
 
     
     args = parser.parse_args()
-    
+    print("arguments given:\n",args,'\n')
+    print("*"*40)
     corpus, labels = load_corpus()
     
     tagger = prepare_tagger(args.lm, labels)
     
     train(tagger, corpus)
     
-    print("Files saved to {args.save_To}")
+    print(f"Files saved to {args.save_to}")
