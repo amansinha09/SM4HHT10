@@ -1,10 +1,17 @@
 data/socialdisner/
 data/socialdisner_sample-set/
-notebooks/
 GraphNER/
 data/socialdisner_v3/
 graph/data/random_features.npz
+<<<<<<< HEAD
 models/flair
 logs/
 submissions/
 
+=======
+<<<<<<< HEAD
+models/flair/
+=======
+models/flair
+>>>>>>> 48e83d1d80da4e2f186f0ce0dd2c1477e60646cf
+>>>>>>> d838e0071bf920e552e12b30f6938c18fb1c214f

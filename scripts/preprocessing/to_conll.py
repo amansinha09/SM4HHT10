@@ -120,7 +120,7 @@ def tagSents(tweets_folder, mentions_file):
     for tag in ["INITTAG", "ENDTAG", "MIDTAG"]: # remove preprocessing tags from tokenized text
         df['tagged_text'] = df['tagged_text'].str.replace(tag,"")
     
-    df.loc[df['tag'] == "O", 'spans'] = "_"
+    df.loc[df['tag'] == "O", 'spans'] = "_" 
     
     spans = [0]         # get spans of every word in each tweet
     for w in df.tagged_text.to_list():
@@ -141,29 +141,30 @@ def tagSents(tweets_folder, mentions_file):
     data_spans.loc[data_spans['end'] == 0, data_spans.columns] = 0
     
     ## Add exceptions on spans
-    special_chars = "¿?+;][\/ºª)(,.-!¡_#º=&%$@<>”:*+^'🟢💉💪🔺🦠👇🏼👇🧠🔵💥🔴😱👂💜💪🏻💙🧏‍♂️👆🏻🐝💄🎗🆘➡❌✊🏼✅⚕️😳…🤦‍♀️🙋😥👉🙃💗❤"
+    # special_chars = "¿?+;][\/ºª)(,.-!¡_#º=&%$@<>”\":*+^'🟢💉💪🔺🦠👇🏼👇🧠🔵💥🔴😱👂💜💪🏻💙🧏‍♂️👆🏻🐝💄🎗🆘➡❌✊🏼✅⚕️😳…🤦‍♀️🙋😥👉🙃💗❤"
 
-    for char in special_chars:
-        data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
-                        (data_spans['tagged_text'].apply(lambda x: str(x).endswith(char))), "end"] = data_spans['end'] - 1
-        data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
-                        (data_spans['tagged_text'].apply(lambda x: str(x).startswith(char))), "begin"] = data_spans['begin'] + 1
-    data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
-                    (data_spans['tagged_text'].apply(lambda x: str(x).endswith('"'))), "end"] = data_spans['end'] - 1
-    data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
-                    (data_spans['tagged_text'].apply(lambda x: str(x).endswith('ESP'))), "end"] = data_spans['end'] - 3
-    data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
-                    (data_spans['tagged_text'].apply(lambda x: str(x).endswith('".'))), "end"] = data_spans['end'] - 1
+    # for char in special_chars:
+    #     data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
+    #                     (data_spans['tagged_text'].apply(lambda x: str(x).endswith(char))), "end"] = data_spans['end'] - 1
+    #     data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
+    #                     (data_spans['tagged_text'].apply(lambda x: str(x).startswith(char))), "begin"] = data_spans['begin'] + 1
+    # data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
+    #                 (data_spans['tagged_text'].apply(lambda x: str(x).endswith('"'))), "end"] = data_spans['end'] - 1
+    # data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
+    #                 (data_spans['tagged_text'].apply(lambda x: str(x).endswith('ESP'))), "end"] = data_spans['end'] - 3
+    # data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
+    #                 (data_spans['tagged_text'].apply(lambda x: str(x).endswith('".'))), "end"] = data_spans['end'] - 1
    
-    for word in ['#DiaMundialdel', '#DiaMundialContraLa', '#DiaMundialContraEl', '#DíaMundialDel',
-                  '#DíaMundialContraLa', '#DíaMundialContraEl', '#PrevenciónDe', '#PersonasCon', '#VivirCon',
-                  '#Vacuna', '#Vacunación', '#SaludMentaly', '#Prevenir', '#DiaMundialDeLa', '#DíaMundialDeLa',
-                  '#comunidad', '#diamundialdela', '#díamundialdela', '#díamundialdel', '#diamundialcontrael',
-                  '#Díadel', '#SemanaMundial', '#TodasContraEl', '#TodosContraEl', '#TodasContraLa', '#TodosContraLa',
-                  '#TodosSomos', '#TodasSomos', '#Díadela', '#Diadel', '#DiaDeLa', '#DíaDel']:
+    # for word in ['#DiaMundialdel', '#DiaMundialContraLa', '#DiaMundialContraEl', '#DíaMundialDel',
+    #               '#DíaMundialContraLa', '#DíaMundialContraEl', '#PrevenciónDe', '#PersonasCon', '#VivirCon',
+    #               '#Vacuna', '#Vacunación', '#SaludMentaly', '#Prevenir', '#DiaMundialDeLa', '#DíaMundialDeLa',
+    #               '#comunidad', '#diamundialdela', '#díamundialdela', '#díamundialdel', '#diamundialcontrael',
+    #               '#Díadel', '#SemanaMundial', '#TodasContraEl', '#TodosContraEl', '#TodasContraLa', '#TodosContraLa',
+    #               '#TodosSomos', '#TodasSomos', '#Díadela', '#Diadel', '#DiaDeLa', '#DíaDel']:
         
-        data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
-                            (data_spans['tagged_text'].apply(lambda x: str(str(x).strip()).startswith(word))), "begin"] = data_spans['begin'] + len(word) - 1  # -1 because of the hashtag, that was considered before
+    #     data_spans.loc[(data_spans['tag'].str.contains('MISC')) & 
+    #                         (data_spans['tagged_text'].apply(lambda x: str(str(x).strip()).startswith(word))), "begin"] = data_spans['begin'] + len(word) - 1  # -1 because of the hashtag, that was considered before
+    
     
     data_spans.loc[data_spans['tagged_text'] == "", 'tagged_text'] = "_"
     data_spans.loc[data_spans.tweets_id == 0, data_spans.columns] = ""
@@ -202,7 +203,7 @@ if __name__ == '__main__':
 
     if "validation" in args.tweetsfolder:
     
-        data.to_csv("data\\conll\\conll-spans-validation_ctest_final.conll", sep="\t", encoding='utf-8', quoting=csv.QUOTE_NONE, index=False)
+        data.to_csv("data\\conll\\conll-spans-validation_ctest_final_testing_new_data.conll", sep="\t", encoding='utf-8', quoting=csv.QUOTE_NONE, index=False)
 
  
    
