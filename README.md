@@ -21,6 +21,19 @@ SPanish NER : Reconocimiento de Entidad Nombrada
 |v1|C ; ??|
 |v2|A ; space based tokenization |
 
+
+## 🥘 Steps quick overview
+- Generate the conll file `to_conll.py`
+- Insert POS/deprel if needed `annotate_conll.py`
+- Check no special chars on genearted files: ⁩|⁦|⁦|⁦|⁦|⁦|2⃣| | |
+‍|⁦| 
+
+- Save files with fixed chars if any.
+- For flair emb/transformers, use conll files. A flair formatted file will be created from them. `train_flair.py` `flair_transformers.py`
+- Create the submission file using the predictions from FLAIR and the used tes file `prediction2submissionformat.py` or `submission.ipynb`
+- Fix the spans `fix_spans_on_submission.py`
+- Run eval scripts `eval_script.py` or `official_eval.py`
+
 ## Steps to prepare the data
 
 1. Use `to_conll.py` to convert the documents and the mentions into a conll file. For that, pass the mention file and the path to the folder containing the text documents. 
@@ -37,13 +50,16 @@ python scripts\preprocessing\annotate_conll.py -file data\conll\training_cdev_fi
 ```
 
 ## Running FLAIR
-# Word embeddings
-```python benchmarks\train_flair.py -train data\sampletraining\training_ctrain_final.conll -val data\sampletraining\training_cdev_final.conll -test data\sampletraining\test_only_space-spans.conll -save_to data\sampletraining\ -lm  "back_forw_clinical" ```
+### Word embeddings
+```
+python benchmarks\train_flair.py -train data\sampletraining\training_ctrain_final.conll -val data\sampletraining\training_cdev_final.conll -test data\sampletraining\test_only_space-spans.conll -save_to data\sampletraining\ -lm  "back_forw_clinical" 
+```
 
-When passing the -lm, a folder called "back_forw_clinical" is created within the provided folder (e.g. sampletraining\). Make sure the folder ends with slash.
+When passing the `-lm`, a folder called "back_forw_clinical" is created within the provided folder (e.g. sampletraining\). Make sure the folder ends with slash.
 
-# Transformers
-
+### Transformers
+```
+```
 
 ## To run evaluation using official script
 
