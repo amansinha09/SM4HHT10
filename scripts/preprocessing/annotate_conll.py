@@ -5,6 +5,7 @@ Created on Wed Jul  6 14:49:11 2022
 @author: Cristina GH
 """
 
+from tqdm import tqdm
 
 import nltk
 import stanza
@@ -42,7 +43,7 @@ def annotate_conll(file, name, save_to):
     text = " ".join(df.Word.astype(str).to_list()).split(' nan ')
     
     tagged_sents = []
-    for sent in text:
+    for sent in tqdm(text):
         pos_tweet = stNLP(sent)
         tagged_sents.append(str([f'{word.text}\t{word.upos}\t{word.deprel}' for s in pos_tweet.sentences for word in s.words]))
     
@@ -54,7 +55,9 @@ def annotate_conll(file, name, save_to):
     tagged_tokens = tagged_tokens[:-1]
     tagged_tokens[["token","UPOS","DEPREL"]] = tagged_tokens["token"].str.split("\t", expand=True)
     tagged_tokens.loc[tagged_tokens["UPOS"].isna(), ["token","UPOS","DEPREL"]] = ""
-    
+    tagged_tokens.to_csv('tagged_token.tsv',sep="\t", encoding="utf-8", quoting=csv.QUOTE_NONE, index=False)
+    print('tagged_token is saved')
+
     df['UPOS'] = tagged_tokens.UPOS.to_list()
     df['DEPREL'] = tagged_tokens.DEPREL.to_list()
     df = df[["Doc_Id", "Sent_Id", "Token_Id", "Word", "UPOS", "DEPREL", "Tag", "Begin", "End"]]

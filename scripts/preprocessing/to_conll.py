@@ -18,7 +18,7 @@ import emoji
 import os
 import argparse
 import numpy as np
-
+from tqdm import tqdm
 
 
 
@@ -38,10 +38,11 @@ def tagSents(tweets_folder, mentions_file):
     '''
     data = []
     sent_num = 0 # give sent num to every word in each file (tweet)
-    for f in glob.glob(tweets_folder):
+    for f in tqdm(glob.glob(f'{tweets_folder}*')):
         with open(f, 'r', encoding="utf-8") as tweet_file:
             f = f.replace("_utf8","")
-            file_tweet_id = f.split("\\")[-1].replace('.txt','')
+            file_tweet_id = f.split("/")[-1].replace('.txt','')
+            #file_tweet_id = f.split("\\")[-1].replace('.txt','')
             file_read = tweet_file.read().strip()
             sent_num += 1
             data.append(str(file_tweet_id + "_SEP_" + file_read + "_SEP_" + str(sent_num)))
@@ -189,7 +190,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     data = tagSents(args.tweetsfolder, args.mentions)
-    
+    #change the name as needed
+    data.to_csv("/home/amsinha/SM4HHT10/data/conll/silver_training_final.conll", sep="\t", encoding='utf-8', quoting=csv.QUOTE_NONE, index=False)
+    '''
     if "training" in args.tweetsfolder:
         split_at_sent = round(80 * len(data.Sent_Id.dropna().drop_duplicates()) / 100)
         split_idx = data.index[data.Sent_Id.astype(str) == str(split_at_sent)][0:1][0] - 1
@@ -204,7 +207,7 @@ if __name__ == '__main__':
     if "validation" in args.tweetsfolder:
     
         data.to_csv("data\\conll\\conll-spans-validation_ctest_final_testing_new_data.conll", sep="\t", encoding='utf-8', quoting=csv.QUOTE_NONE, index=False)
-
+   '''
  
    
     
