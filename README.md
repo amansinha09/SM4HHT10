@@ -1,25 +1,7 @@
 # SM4HHT10
 
-SPanish NER : Reconocimiento de Entidad Nombrada
-
-
-## ToDo
-
-
-- [x] Add the dataset
-- [x] Make list of the benchmarks
-- [x] create conll3 dataformat converter 
-- [x] eval script
-- [ ] Try out benchmarks and update readme
-- [ ] Try out graphner and update
-- [x] Extract POS 
-
-## Data Version description
-
-|version|desciption|
-|---|---|
-|v1|C ; ??|
-|v2|A ; space based tokenization |
+Code repository for the paper : 
+Team IAI @ SocialDisNER : Catch me if you can! Capturing complex disease mentions in tweets
 
 
 ## 🥘 Steps quick overview
@@ -49,16 +31,28 @@ What preprocessing is done:
 python scripts\preprocessing\annotate_conll.py -file data\conll\training_cdev_final.tsv -name validation -save_to data\conll\
 ```
 
-## Running FLAIR
-### Word embeddings
+## Sample instruction run the models
+
+1. Flair-S
 ```
-python benchmarks\train_flair.py -train data\sampletraining\training_ctrain_final.conll -val data\sampletraining\training_cdev_final.conll -test data\sampletraining\test_only_space-spans.conll -save_to data\sampletraining\ -lm  "back_forw_clinical" 
+python ~/SM4HHT10/benchmarks/train_flair.py  --train ../data/conll/official_train.conll \
+                                                    --val ../data/conll/official_dev_validation.conll \
+                                                    --test  ../data/conll/official_test.conll \
+                                                    --EPOCHS 50\
+                                                    --save_to ./sf_spainish_50/ \
+                                                    --lm back_forw_clinical
 ```
 
-When passing the `-lm`, a folder called "back_forw_clinical" is created within the provided folder (e.g. sampletraining\). Make sure the folder ends with slash.
+2. Flair-T
 
-### Transformers
 ```
+python ~/SM4HHT10/benchmarks/flair_transformers.py  --train ../data/conll/official_train.conll \
+                                                    --val ../data/conll/official_dev_validation.conll \
+                                                    --test  ../data/conll/official_test.conll \
+                                                    --EPOCHS 15\
+                                                    --save_to ./resources_wmn/ \
+                                                    --lm Babelscape/wikineural-multilingual-ner
+
 ```
 
 ## To run evaluation using official script
